@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Golf Programs — Limitless Golf Studio Phuket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: { DEFAULT: '#121212', light: '#1a1a1a', card: '#1e1e1e', soft: '#2a2a2a' },
+                        orange: { DEFAULT: '#FF7A00', dark: '#e06d00', glow: 'rgba(255,122,0,0.35)' },
+                        grey: { DEFAULT: '#E0E0E0', muted: '#999999', dim: '#666666' },
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #121212; }
+        .nav-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s cubic-bezier(.25,.46,.45,.94), transform 0.7s cubic-bezier(.25,.46,.45,.94); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.25s; }
+        .reveal-d3 { transition-delay: 0.4s; }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,122,0,0.25); border-color: rgba(255,122,0,0.4); }
+        .modal-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+        .modal-panel { transform: scale(0.9) translateY(20px); opacity: 0; transition: transform 0.3s cubic-bezier(.25,.46,.45,.94), opacity 0.3s ease; }
+        .modal-backdrop.active .modal-panel { transform: scale(1) translateY(0); opacity: 1; }
+        .contact-btn { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .contact-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(255,122,0,0.2); }
+    </style>
+</head>
+<body class="bg-black text-white antialiased">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 inset-x-0 z-50 nav-blur bg-black/80 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between">
+            <a href="index.html" class="text-xl font-extrabold tracking-tight">LIMITLESS <span class="text-orange">GOLF</span></a>
+            <ul class="hidden md:flex items-center gap-7">
+                <li><a href="index.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Home</a></li>
+                <li><a href="about.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">About</a></li>
+                <li><a href="lessons.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Lessons</a></li>
+                <li><a href="bays.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">The Bays</a></li>
+                <li><a href="articles.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Articles</a></li>
+                <li><a href="success.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Success</a></li>
+                <li><button onclick="openModal()" class="bg-orange text-black text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-orange-dark hover:text-white hover:shadow-[0_4px_20px_rgba(255,122,0,0.4)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">Contact Us</button></li>
+            </ul>
+            <button class="md:hidden flex flex-col gap-[5px] p-1" id="navToggle" aria-label="Menu">
+                <span class="block w-6 h-0.5 bg-white rounded transition-transform duration-300" id="b1"></span>
+                <span class="block w-6 h-0.5 bg-white rounded transition-opacity duration-300" id="b2"></span>
+                <span class="block w-6 h-0.5 bg-white rounded transition-transform duration-300" id="b3"></span>
+            </button>
+        </div>
+        <div class="md:hidden hidden flex-col gap-4 px-5 pb-6 bg-black/95 nav-blur border-b border-white/5" id="mobileMenu">
+            <a href="index.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Home</a>
+            <a href="about.html" class="text-sm text-grey-muted hover:text-orange transition-colors">About</a>
+            <a href="lessons.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Lessons</a>
+            <a href="bays.html" class="text-sm text-grey-muted hover:text-orange transition-colors">The Bays</a>
+            <a href="articles.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Articles</a>
+            <a href="success.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Success</a>
+            <button onclick="openModal()" class="bg-orange text-black text-sm font-bold px-6 py-3 rounded-lg text-center hover:bg-orange-dark hover:text-white transition-all cursor-pointer">Contact Us</button>
+        </div>
+    </nav>
+
+    <!-- CONTACT MODAL -->
+    <div class="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-5" id="contactModal" style="background:rgba(0,0,0,0.75); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);">
+        <div class="modal-panel bg-black-card border border-white/10 rounded-3xl w-full max-w-md p-8 relative">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-orange hover:text-orange transition-all duration-300 cursor-pointer" aria-label="Close"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 bg-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-7 h-7 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <h3 class="text-2xl font-extrabold mb-1">Get in Touch</h3>
+                <p class="text-sm text-grey-muted">Choose your preferred way to reach us</p>
+            </div>
+            <div class="space-y-4">
+                <a href="https://line.me/" target="_blank" rel="noopener" class="contact-btn flex items-center gap-4 w-full p-4 bg-[#06C755]/10 border border-[#06C755]/20 rounded-xl hover:border-[#06C755]/50 transition-all duration-300 group"><div class="w-12 h-12 bg-[#06C755] rounded-xl flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></div><div><div class="font-bold text-sm">LINE Official</div><div class="text-xs text-grey-dim">Chat with us instantly</div></div><svg class="w-5 h-5 text-grey-dim ml-auto group-hover:text-[#06C755] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                <a href="https://wa.me/66123456789" target="_blank" rel="noopener" class="contact-btn flex items-center gap-4 w-full p-4 bg-[#25D366]/10 border border-[#25D366]/20 rounded-xl hover:border-[#25D366]/50 transition-all duration-300 group"><div class="w-12 h-12 bg-[#25D366] rounded-xl flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div><div><div class="font-bold text-sm">WhatsApp</div><div class="text-xs text-grey-dim">Message us anytime</div></div><svg class="w-5 h-5 text-grey-dim ml-auto group-hover:text-[#25D366] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                <a href="tel:+66123456789" class="contact-btn flex items-center gap-4 w-full p-4 bg-orange/10 border border-orange/20 rounded-xl hover:border-orange/50 transition-all duration-300 group"><div class="w-12 h-12 bg-orange rounded-xl flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="font-bold text-sm">Direct Call</div><div class="text-xs text-grey-dim">+66 12 345 6789</div></div><svg class="w-5 h-5 text-grey-dim ml-auto group-hover:text-orange transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+            <p class="text-center text-xs text-grey-dim mt-6">We typically reply within 30 minutes</p>
+        </div>
+    </div>
+
+    <!-- PAGE HERO -->
+    <section class="relative pt-[72px]">
+        <div class="relative h-[45vh] min-h-[360px] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1920&h=700&fit=crop&q=80" alt="Junior golfers" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-[#121212]"></div>
+            <div class="relative z-10 h-full flex items-center justify-center text-center px-5">
+                <div>
+                    <div class="inline-flex items-center gap-2 bg-orange/10 border border-orange/25 text-orange text-xs font-semibold uppercase tracking-widest px-5 py-2 rounded-full mb-5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        Ages 6–18
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">Junior Golf Programs</h1>
+                    <p class="text-grey-muted mt-4 max-w-xl mx-auto">Building the next generation of champions with world-class coaching, data-driven training, and a love for the game.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         WHY JUNIOR GOLF
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div class="reveal">
+                    <div class="w-12 h-[3px] bg-orange rounded mb-5"></div>
+                    <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Why Limitless Juniors</p>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6 leading-tight">
+                        Where Young Players Become <span class="text-orange">Champions</span>
+                    </h2>
+                    <p class="text-grey-muted leading-relaxed mb-5">
+                        Our junior program isn't just about teaching kids to swing a club. It's a structured, long-term development pathway that combines technical coaching, physical fitness, mental game training, and competitive preparation — all powered by the same TrackMan technology used by the pros.
+                    </p>
+                    <p class="text-grey-muted leading-relaxed mb-8">
+                        From a 6-year-old picking up a club for the first time to a 17-year-old competing at the national level, every junior gets a personalized plan built around their age, ability, and ambition.
+                    </p>
+                    <div class="grid grid-cols-3 gap-5">
+                        <div><div class="text-3xl font-black text-orange">50+</div><div class="text-xs text-grey-dim uppercase tracking-wide mt-1">Junior Students</div></div>
+                        <div><div class="text-3xl font-black text-orange">8</div><div class="text-xs text-grey-dim uppercase tracking-wide mt-1">National Titles</div></div>
+                        <div><div class="text-3xl font-black text-orange">3</div><div class="text-xs text-grey-dim uppercase tracking-wide mt-1">International Reps</div></div>
+                    </div>
+                </div>
+                <div class="reveal reveal-d2">
+                    <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800&h=600&fit=crop&q=80" alt="Junior golfer practicing" class="w-full rounded-2xl border border-white/5 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         AGE GROUP PROGRAMS — 3 Cards
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Programs by Age</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Find the Right Fit</h2>
+                <p class="text-grey-muted leading-relaxed">Three structured tiers designed for progressive development from first swing to competitive play.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-7 max-w-[1100px] mx-auto items-stretch">
+
+                <!-- Little Links (6-9) -->
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl overflow-hidden card-hover reveal reveal-d1 flex flex-col h-full">
+                    <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=600&h=350&fit=crop&q=80" alt="Young junior golfers" class="w-full h-48 object-cover">
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[11px] font-bold uppercase tracking-[2px] text-grey-dim">Ages 6–9</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-black bg-orange px-2 py-0.5 rounded-full">Intro</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold mb-2">Little Links</h3>
+                        <p class="text-sm text-grey-muted leading-relaxed mb-6">Fun, play-based introduction to golf. Building coordination, confidence, and a genuine love for the game.</p>
+
+                        <div class="mb-6">
+                            <span class="text-3xl font-black">8,000</span>
+                            <span class="text-base font-semibold text-grey-muted ml-1">THB</span>
+                            <div class="text-xs text-grey-dim mt-1">per month (4 sessions)</div>
+                        </div>
+
+                        <div class="h-px bg-white/5 mb-5"></div>
+
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Fun games & challenges</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Basic grip, stance & swing</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Putting & chipping intro</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Small group (max 4 kids)</li>
+                        </ul>
+
+                        <button onclick="openModal()" class="mt-auto block w-full text-center py-4 border border-white/10 rounded-xl text-sm font-bold hover:border-orange hover:text-orange hover:shadow-[0_0_20px_rgba(255,122,0,0.15)] transition-all duration-300 cursor-pointer bg-transparent text-white">Enroll Now</button>
+                    </div>
+                </div>
+
+                <!-- Junior Development (10-14) -->
+                <div class="bg-black-card border-2 border-orange rounded-2xl overflow-hidden card-hover reveal reveal-d2 flex flex-col h-full relative" style="background: linear-gradient(180deg, rgba(255,122,0,0.06) 0%, #1e1e1e 30%);">
+                    <div class="absolute top-48 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange text-black text-[11px] font-extrabold uppercase tracking-wider px-5 py-1.5 rounded-full z-10 whitespace-nowrap">Most Popular</div>
+                    <img src="https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=600&h=350&fit=crop&q=80" alt="Junior development training" class="w-full h-48 object-cover">
+                    <div class="p-8 pt-10 flex flex-col flex-grow">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[11px] font-bold uppercase tracking-[2px] text-orange">Ages 10–14</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-black bg-orange px-2 py-0.5 rounded-full">Core</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold mb-2">Junior Development</h3>
+                        <p class="text-sm text-grey-muted leading-relaxed mb-6">Structured skill-building with TrackMan data, video analysis, and introduction to competitive play.</p>
+
+                        <div class="mb-6">
+                            <span class="text-3xl font-black">15,000</span>
+                            <span class="text-base font-semibold text-grey-muted ml-1">THB</span>
+                            <div class="text-xs text-grey-dim mt-1">per month (8 sessions)</div>
+                        </div>
+
+                        <div class="h-px bg-white/5 mb-5"></div>
+
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Full swing development</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>TrackMan data sessions</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Video swing analysis</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Short game & course play</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Tournament preparation</li>
+                        </ul>
+
+                        <button onclick="openModal()" class="mt-auto block w-full text-center py-4 bg-orange text-black rounded-xl text-sm font-bold hover:bg-orange-dark hover:text-white hover:shadow-[0_8px_30px_rgba(255,122,0,0.35)] transition-all duration-300 cursor-pointer border-none">Enroll Now</button>
+                    </div>
+                </div>
+
+                <!-- Elite Junior (15-18) -->
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl overflow-hidden card-hover reveal reveal-d3 flex flex-col h-full">
+                    <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&h=350&fit=crop&q=80" alt="Elite junior golfer" class="w-full h-48 object-cover">
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[11px] font-bold uppercase tracking-[2px] text-grey-dim">Ages 15–18</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-black bg-orange px-2 py-0.5 rounded-full">Elite</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold mb-2">Elite Junior</h3>
+                        <p class="text-sm text-grey-muted leading-relaxed mb-6">Competition-focused program for serious players targeting national and international tournaments.</p>
+
+                        <div class="mb-6">
+                            <span class="text-3xl font-black">25,000</span>
+                            <span class="text-base font-semibold text-grey-muted ml-1">THB</span>
+                            <div class="text-xs text-grey-dim mt-1">per month (12 sessions)</div>
+                        </div>
+
+                        <div class="h-px bg-white/5 mb-5"></div>
+
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Advanced biomechanics</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Mental game coaching</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Competition strategy</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Fitness & conditioning</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Priority bay access</li>
+                            <li class="flex items-center gap-3 text-sm text-grey"><span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Monthly progress report</li>
+                        </ul>
+
+                        <button onclick="openModal()" class="mt-auto block w-full text-center py-4 border border-white/10 rounded-xl text-sm font-bold hover:border-orange hover:text-orange hover:shadow-[0_0_20px_rgba(255,122,0,0.15)] transition-all duration-300 cursor-pointer bg-transparent text-white">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         DEVELOPMENT PATHWAY
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32 border-t border-white/5">
+        <div class="max-w-5xl mx-auto px-5">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">The Journey</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Development Pathway</h2>
+                <p class="text-grey-muted leading-relaxed">A clear, structured progression from beginner to competitive player.</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="flex gap-6 items-start reveal reveal-d1">
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="w-12 h-12 rounded-full bg-orange flex items-center justify-center text-black font-black text-lg">1</div>
+                        <div class="w-px h-full bg-white/10 mt-2"></div>
+                    </div>
+                    <div class="bg-black-card border border-white/[0.06] rounded-xl p-6 flex-grow card-hover">
+                        <h4 class="font-bold text-lg mb-1">Discover & Play</h4>
+                        <p class="text-sm text-grey-muted leading-relaxed">Introduction to the game through fun, play-based activities. Building basic motor skills, hand-eye coordination, and etiquette. No experience needed.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex gap-6 items-start reveal reveal-d1">
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="w-12 h-12 rounded-full bg-orange flex items-center justify-center text-black font-black text-lg">2</div>
+                        <div class="w-px h-full bg-white/10 mt-2"></div>
+                    </div>
+                    <div class="bg-black-card border border-white/[0.06] rounded-xl p-6 flex-grow card-hover">
+                        <h4 class="font-bold text-lg mb-1">Build Foundations</h4>
+                        <p class="text-sm text-grey-muted leading-relaxed">Developing consistent swing mechanics, short game fundamentals, and understanding course management. Introduction to TrackMan data.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex gap-6 items-start reveal reveal-d2">
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="w-12 h-12 rounded-full bg-orange flex items-center justify-center text-black font-black text-lg">3</div>
+                        <div class="w-px h-full bg-white/10 mt-2"></div>
+                    </div>
+                    <div class="bg-black-card border border-white/[0.06] rounded-xl p-6 flex-grow card-hover">
+                        <h4 class="font-bold text-lg mb-1">Compete & Grow</h4>
+                        <p class="text-sm text-grey-muted leading-relaxed">Entering local and regional tournaments. Developing pre-shot routines, pressure management, and competitive mindset with mental game coaching.</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex gap-6 items-start reveal reveal-d2">
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="w-12 h-12 rounded-full bg-orange flex items-center justify-center text-black font-black text-lg">4</div>
+                    </div>
+                    <div class="bg-black-card border border-white/[0.06] rounded-xl p-6 flex-grow card-hover">
+                        <h4 class="font-bold text-lg mb-1">Elite Performance</h4>
+                        <p class="text-sm text-grey-muted leading-relaxed">National and international tournament preparation. Advanced biomechanics, fitness integration, college scholarship guidance, and touring professional pathways.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         WHAT PARENTS SAY
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-5">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">From Parents</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">What Parents Say</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-7">
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-8 card-hover reveal reveal-d1 relative">
+                    <span class="absolute top-4 left-6 text-[60px] font-black leading-none text-orange/10">"</span>
+                    <blockquote class="text-grey leading-relaxed mb-5 relative z-10 mt-6">
+                        "My daughter went from struggling at local events to winning the Junior National Championship. The coaches genuinely care about every kid's development — not just their swing, but their confidence and character too."
+                    </blockquote>
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=80&h=80&fit=crop&q=80" alt="Parent" class="w-10 h-10 rounded-full object-cover border border-orange/30">
+                        <div><div class="text-sm font-bold">Proud Parent</div><div class="text-xs text-grey-dim">Daughter in Elite Junior Program</div></div>
+                    </div>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-8 card-hover reveal reveal-d2 relative">
+                    <span class="absolute top-4 left-6 text-[60px] font-black leading-none text-orange/10">"</span>
+                    <blockquote class="text-grey leading-relaxed mb-5 relative z-10 mt-6">
+                        "My 7-year-old looks forward to his Saturday sessions more than anything. The Little Links program makes golf fun — he doesn't even realize how much he's learning. Now he drags us to the driving range on weekends!"
+                    </blockquote>
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Parent" class="w-10 h-10 rounded-full object-cover border border-orange/30">
+                        <div><div class="text-sm font-bold">Happy Parent</div><div class="text-xs text-grey-dim">Son in Little Links Program</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FAQ
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32 border-t border-white/5">
+        <div class="max-w-3xl mx-auto px-5">
+            <div class="text-center mb-12 reveal">
+                <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">FAQ</p>
+                <h2 class="text-3xl font-extrabold tracking-tight">Common Questions</h2>
+            </div>
+            <div class="space-y-4 reveal">
+                <div class="bg-black-card border border-white/[0.06] rounded-xl p-6">
+                    <h4 class="font-bold mb-2">Does my child need their own clubs?</h4>
+                    <p class="text-sm text-grey-muted leading-relaxed">No — we have junior-sized clubs available for all ages. As they progress, we can advise on the right equipment to purchase.</p>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-xl p-6">
+                    <h4 class="font-bold mb-2">Can parents watch the sessions?</h4>
+                    <p class="text-sm text-grey-muted leading-relaxed">Absolutely. Our studio has a comfortable viewing area with refreshments. Parents are always welcome to observe.</p>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-xl p-6">
+                    <h4 class="font-bold mb-2">My child has never played golf — is that okay?</h4>
+                    <p class="text-sm text-grey-muted leading-relaxed">Perfect! The Little Links program is designed for complete beginners. We make the first experience fun and pressure-free.</p>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-xl p-6">
+                    <h4 class="font-bold mb-2">How do you handle different skill levels in group sessions?</h4>
+                    <p class="text-sm text-grey-muted leading-relaxed">Groups are kept small (max 4) and are organized by age and ability. Each child gets individual attention within the group format.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         CTA
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32 border-t border-white/5 relative overflow-hidden">
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none" style="background: radial-gradient(circle, rgba(255,122,0,0.08) 0%, transparent 70%);"></div>
+        <div class="relative z-10 text-center max-w-2xl mx-auto px-5 reveal">
+            <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Get Started</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Give Your Child a Head Start</h2>
+            <p class="text-grey-muted leading-relaxed mb-10">Book a free trial session and see why Phuket's top junior golfers train at Limitless.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="openModal()" class="inline-flex items-center justify-center gap-2 bg-orange text-black font-bold text-base px-8 py-4 rounded-xl hover:bg-orange-dark hover:text-white hover:shadow-[0_8px_30px_rgba(255,122,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Book a Free Trial
+                </button>
+                <a href="success.html" class="inline-flex items-center justify-center gap-2 border border-white/10 text-white font-bold text-base px-8 py-4 rounded-xl hover:border-orange hover:text-orange transition-all duration-300 hover:-translate-y-0.5">
+                    See Our Champions
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="grid md:grid-cols-3 gap-10 mb-10">
+                <div><div class="text-lg font-extrabold mb-3">LIMITLESS <span class="text-orange">GOLF</span></div><p class="text-sm text-grey-dim leading-relaxed">Phuket's premier indoor golf studio. World-class simulators, expert coaching, and a luxury experience.</p></div>
+                <div><h4 class="font-bold text-sm uppercase tracking-wider mb-4">Quick Links</h4><ul class="space-y-2"><li><a href="index.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Home</a></li><li><a href="about.html" class="text-sm text-grey-dim hover:text-orange transition-colors">About Us</a></li><li><a href="lessons.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Lesson Packages</a></li><li><a href="bays.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Book a Bay</a></li><li><a href="articles.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Articles</a></li><li><a href="success.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Success</a></li></ul></div>
+                <div><h4 class="font-bold text-sm uppercase tracking-wider mb-4">Contact</h4><ul class="space-y-2 text-sm text-grey-dim"><li>123/45 Laguna, Cherngtalay</li><li>Phuket 83110, Thailand</li><li class="pt-1"><a href="tel:+66123456789" class="hover:text-orange transition-colors">+66 12 345 6789</a></li><li><a href="mailto:info@limitlessgolfphuket.com" class="hover:text-orange transition-colors">info@limitlessgolfphuket.com</a></li></ul></div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-grey-dim">&copy; 2026 Limitless Golf Studio Phuket. All rights reserved.</p>
+                <ul class="flex items-center gap-5"><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Privacy Policy</a></li><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Terms</a></li><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Instagram</a></li><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Facebook</a></li></ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const navToggle=document.getElementById('navToggle'),mobileMenu=document.getElementById('mobileMenu'),b1=document.getElementById('b1'),b2=document.getElementById('b2'),b3=document.getElementById('b3');let menuOpen=false;navToggle.addEventListener('click',()=>{menuOpen=!menuOpen;mobileMenu.classList.toggle('hidden',!menuOpen);mobileMenu.classList.toggle('flex',menuOpen);b1.style.transform=menuOpen?'rotate(45deg) translate(5px,5px)':'';b2.style.opacity=menuOpen?'0':'1';b3.style.transform=menuOpen?'rotate(-45deg) translate(5px,-5px)':'';});mobileMenu.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>{menuOpen=false;mobileMenu.classList.add('hidden');mobileMenu.classList.remove('flex');b1.style.transform='';b2.style.opacity='1';b3.style.transform='';}));
+        const modal=document.getElementById('contactModal');function openModal(){modal.classList.add('active');document.body.style.overflow='hidden';}function closeModal(){modal.classList.remove('active');document.body.style.overflow='';}modal.addEventListener('click',(e)=>{if(e.target===modal)closeModal();});document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal();});
+        const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}});},{threshold:0.12,rootMargin:'0px 0px -50px 0px'});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+    </script>
+</body>
+</html>
