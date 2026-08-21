@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Success — Limitless Golf Studio Phuket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: { DEFAULT: '#121212', light: '#1a1a1a', card: '#1e1e1e', soft: '#2a2a2a' },
+                        orange: { DEFAULT: '#FF7A00', dark: '#e06d00', glow: 'rgba(255,122,0,0.35)' },
+                        grey: { DEFAULT: '#E0E0E0', muted: '#999999', dim: '#666666' },
+                        gold: { DEFAULT: '#FFD700', dark: '#C5A200' },
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #121212; }
+        .nav-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+        /* Scroll reveal */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s cubic-bezier(.25,.46,.45,.94), transform 0.7s cubic-bezier(.25,.46,.45,.94); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.25s; }
+        .reveal-d3 { transition-delay: 0.4s; }
+
+        /* Card hover with orange glow */
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,122,0,0.25); border-color: rgba(255,122,0,0.4); }
+
+        /* Champion card special glow */
+        .champion-card { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .champion-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 50px rgba(255,122,0,0.35), 0 0 80px rgba(255,122,0,0.15);
+            border-color: #FF7A00;
+        }
+
+        /* Trophy glow pulse */
+        .trophy-glow {
+            filter: drop-shadow(0 0 30px rgba(255,215,0,0.3)) drop-shadow(0 0 60px rgba(255,122,0,0.15));
+        }
+        .trophy-glow:hover {
+            filter: drop-shadow(0 0 40px rgba(255,215,0,0.5)) drop-shadow(0 0 80px rgba(255,122,0,0.25));
+            transition: filter 0.5s ease;
+        }
+
+        /* Modal */
+        .modal-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+        .modal-panel { transform: scale(0.9) translateY(20px); opacity: 0; transition: transform 0.3s cubic-bezier(.25,.46,.45,.94), opacity 0.3s ease; }
+        .modal-backdrop.active .modal-panel { transform: scale(1) translateY(0); opacity: 1; }
+        .contact-btn { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .contact-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(255,122,0,0.2); }
+
+        /* Gold shimmer text */
+        .text-gold-shimmer {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 30%, #FFD700 50%, #FFEC8B 70%, #FFD700 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        /* Radial spotlight behind trophy */
+        .trophy-spotlight {
+            background: radial-gradient(ellipse at center, rgba(255,215,0,0.08) 0%, rgba(255,122,0,0.04) 40%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="bg-black text-white antialiased">
+
+    <!-- ═══════════════════════════════════════════
+         NAVIGATION
+         ═══════════════════════════════════════════ -->
+    <nav class="fixed top-0 inset-x-0 z-50 nav-blur bg-black/80 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between">
+            <a href="index.html" class="text-xl font-extrabold tracking-tight">LIMITLESS <span class="text-orange">GOLF</span></a>
+            <ul class="hidden md:flex items-center gap-7">
+                <li><a href="index.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Home</a></li>
+                <li><a href="about.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">About</a></li>
+                <li><a href="lessons.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Lessons</a></li>
+                <li><a href="bays.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">The Bays</a></li>
+                <li><a href="articles.html" class="text-sm text-grey-muted hover:text-orange transition-colors duration-300">Articles</a></li>
+                <li><button onclick="openModal()" class="bg-orange text-black text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-orange-dark hover:text-white hover:shadow-[0_4px_20px_rgba(255,122,0,0.4)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">Contact Us</button></li>
+            </ul>
+            <button class="md:hidden flex flex-col gap-[5px] p-1" id="navToggle" aria-label="Menu">
+                <span class="block w-6 h-0.5 bg-white rounded transition-transform duration-300" id="b1"></span>
+                <span class="block w-6 h-0.5 bg-white rounded transition-opacity duration-300" id="b2"></span>
+                <span class="block w-6 h-0.5 bg-white rounded transition-transform duration-300" id="b3"></span>
+            </button>
+        </div>
+        <div class="md:hidden hidden flex-col gap-4 px-5 pb-6 bg-black/95 nav-blur border-b border-white/5" id="mobileMenu">
+            <a href="index.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Home</a>
+            <a href="about.html" class="text-sm text-grey-muted hover:text-orange transition-colors">About</a>
+            <a href="lessons.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Lessons</a>
+            <a href="bays.html" class="text-sm text-grey-muted hover:text-orange transition-colors">The Bays</a>
+            <a href="articles.html" class="text-sm text-grey-muted hover:text-orange transition-colors">Articles</a>
+            <button onclick="openModal()" class="bg-orange text-black text-sm font-bold px-6 py-3 rounded-lg text-center hover:bg-orange-dark hover:text-white transition-all cursor-pointer">Contact Us</button>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         CONTACT MODAL
+         ═══════════════════════════════════════════ -->
+    <div class="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-5" id="contactModal" style="background:rgba(0,0,0,0.75); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);">
+        <div class="modal-panel bg-black-card border border-white/10 rounded-3xl w-full max-w-md p-8 relative">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-orange hover:text-orange transition-all duration-300 cursor-pointer" aria-label="Close"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 bg-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-7 h-7 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <h3 class="text-2xl font-extrabold mb-1">Get in Touch</h3>
+                <p class="text-sm text-grey-muted">Choose your preferred way to reach us</p>
+            </div>
+            <div class="space-y-4">
+                <a href="https://line.me/" target="_blank" rel="noopener" class="contact-btn flex items-center gap-4 w-full p-4 bg-[#06C755]/10 border border-[#06C755]/20 rounded-xl hover:border-[#06C755]/50 transition-all duration-300 group"><div class="w-12 h-12 bg-[#06C755] rounded-xl flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></div><div><div class="font-bold text-sm">LINE Official</div><div class="text-xs text-grey-dim">Chat with us instantly</div></div><svg class="w-5 h-5 text-grey-dim ml-auto group-hover:text-[#06C755] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                <a href="https://wa.me/66123456789" target="_blank" rel="noopener" class="contact-btn flex items-center gap-4 w-full p-4 bg-[#25D366]/10 border border-[#25D366]/20 rounded-xl hover:border-[#25D366]/50 transition-all duration-300 group"><div class="w-12 h-12 bg-[#25D366] rounded-xl flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div><div><div class="font-bold text-sm">WhatsApp</div><div class="text-xs text-grey-dim">Message us anytime</div></div><svg class="w-5 h-5 text-grey-dim ml-auto group-hover:text-[#25D366] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                <a href="tel:+66123456789" class="contact-btn flex items-center gap-4 w-full p-4 bg-orange/10 border border-orange/20 rounded-xl hover:border-orange/50 transition-all duration-300 group"><div class="w-12 h-12 bg-orange rounded-xl flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="font-bold text-sm">Direct Call</div><div class="text-xs text-grey-dim">+66 12 345 6789</div></div><svg class="w-5 h-5 text-grey-dim ml-auto group-hover:text-orange transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+            <p class="text-center text-xs text-grey-dim mt-6">We typically reply within 30 minutes</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE HERO
+         ═══════════════════════════════════════════ -->
+    <section class="relative pt-[72px]">
+        <div class="relative h-[45vh] min-h-[360px] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=1920&h=700&fit=crop&q=80" alt="Golf success" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-[#121212]"></div>
+            <div class="relative z-10 h-full flex items-center justify-center text-center px-5">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Student Success</p>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">Our Champions</h1>
+                    <p class="text-grey-muted mt-4 max-w-lg mx-auto">Real students. Real trophies. Real results — trained right here at Limitless Golf Studio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ╔═══════════════════════════════════════════════════════════╗
+         ║  SECTION 1: CHAMPIONS HALL OF FAME                       ║
+         ╚═══════════════════════════════════════════════════════════╝ -->
+    <section class="py-24 lg:py-36 relative overflow-hidden">
+
+        <!-- Background spotlight glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] trophy-spotlight pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-5 relative z-10">
+
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <div class="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 text-gold text-[11px] font-bold uppercase tracking-[3px] px-5 py-2 rounded-full mb-5">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    Hall of Fame
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4">
+                    <span class="text-gold-shimmer">CHAMPIONS</span> HALL OF FAME
+                </h2>
+                <p class="text-grey-muted leading-relaxed text-lg">
+                    Celebrating the extraordinary achievements of our student athletes on the national and international stage.
+                </p>
+            </div>
+
+            <!-- ── Trophy Display ── -->
+            <div class="flex items-end justify-center gap-4 sm:gap-8 mb-20 reveal">
+                <!-- Left small trophy -->
+                <div class="text-center">
+                    <div class="relative">
+                        <svg class="w-16 h-20 sm:w-20 sm:h-24 mx-auto trophy-glow" viewBox="0 0 80 96" fill="none">
+                            <!-- Cup body -->
+                            <path d="M20 8h40v32c0 14-9 26-20 28-11-2-20-14-20-28V8z" fill="url(#silver1)" stroke="#C0C0C0" stroke-width="1"/>
+                            <!-- Left handle -->
+                            <path d="M20 16c-8 0-14 6-14 14s6 14 14 14" stroke="#A0A0A0" stroke-width="3" fill="none"/>
+                            <!-- Right handle -->
+                            <path d="M60 16c8 0 14 6 14 14s-6 14-14 14" stroke="#A0A0A0" stroke-width="3" fill="none"/>
+                            <!-- Stem -->
+                            <rect x="35" y="68" width="10" height="12" fill="#A0A0A0" rx="2"/>
+                            <!-- Base -->
+                            <rect x="22" y="80" width="36" height="8" rx="4" fill="url(#silver1)"/>
+                            <defs><linearGradient id="silver1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D0D0D0"/><stop offset="50%" stop-color="#F5F5F5"/><stop offset="100%" stop-color="#A8A8A8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <div class="w-20 sm:w-24 h-6 bg-gradient-to-t from-black-soft to-black-card border border-white/5 rounded-t-lg mx-auto mt-1"></div>
+                </div>
+
+                <!-- Center large trophy (GOLD) -->
+                <div class="text-center -mt-8">
+                    <div class="relative">
+                        <svg class="w-28 h-36 sm:w-36 sm:h-44 mx-auto trophy-glow" viewBox="0 0 100 120" fill="none">
+                            <!-- Cup body -->
+                            <path d="M22 10h56v40c0 18-12 34-28 36-16-2-28-18-28-36V10z" fill="url(#gold1)" stroke="#DAA520" stroke-width="1.5"/>
+                            <!-- Left handle -->
+                            <path d="M22 20c-10 0-18 8-18 18s8 18 18 18" stroke="#DAA520" stroke-width="4" fill="none"/>
+                            <!-- Right handle -->
+                            <path d="M78 20c10 0 18 8 18 18s-8 18-18 18" stroke="#DAA520" stroke-width="4" fill="none"/>
+                            <!-- Star on cup -->
+                            <path d="M50 22l4 8 9 1.3-6.5 6.3 1.5 9L50 42l-8 4.6 1.5-9L37 31.3l9-1.3 4-8z" fill="#FFF8DC" opacity="0.6"/>
+                            <!-- Stem -->
+                            <rect x="42" y="86" width="16" height="14" fill="#DAA520" rx="3"/>
+                            <!-- Base -->
+                            <rect x="25" y="100" width="50" height="10" rx="5" fill="url(#gold1)"/>
+                            <!-- Base detail -->
+                            <rect x="30" y="110" width="40" height="5" rx="2.5" fill="#B8860B"/>
+                            <defs><linearGradient id="gold1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFD700"/><stop offset="30%" stop-color="#FFEC8B"/><stop offset="60%" stop-color="#FFD700"/><stop offset="100%" stop-color="#DAA520"/></linearGradient></defs>
+                        </svg>
+                        <!-- Glow ring -->
+                        <div class="absolute -inset-4 rounded-full bg-gold/5 blur-xl -z-10"></div>
+                    </div>
+                    <div class="w-28 sm:w-36 h-8 bg-gradient-to-t from-black-soft to-black-card border border-gold/20 rounded-t-lg mx-auto mt-1"></div>
+                </div>
+
+                <!-- Right small trophy -->
+                <div class="text-center">
+                    <div class="relative">
+                        <svg class="w-16 h-20 sm:w-20 sm:h-24 mx-auto trophy-glow" viewBox="0 0 80 96" fill="none">
+                            <path d="M20 8h40v32c0 14-9 26-20 28-11-2-20-14-20-28V8z" fill="url(#silver2)" stroke="#C0C0C0" stroke-width="1"/>
+                            <path d="M20 16c-8 0-14 6-14 14s6 14 14 14" stroke="#A0A0A0" stroke-width="3" fill="none"/>
+                            <path d="M60 16c8 0 14 6 14 14s-6 14-14 14" stroke="#A0A0A0" stroke-width="3" fill="none"/>
+                            <rect x="35" y="68" width="10" height="12" fill="#A0A0A0" rx="2"/>
+                            <rect x="22" y="80" width="36" height="8" rx="4" fill="url(#silver2)"/>
+                            <defs><linearGradient id="silver2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D0D0D0"/><stop offset="50%" stop-color="#F5F5F5"/><stop offset="100%" stop-color="#A8A8A8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <div class="w-20 sm:w-24 h-6 bg-gradient-to-t from-black-soft to-black-card border border-white/5 rounded-t-lg mx-auto mt-1"></div>
+                </div>
+            </div>
+
+            <!-- ── Champion Cards Grid (3 columns) ── -->
+            <div class="grid md:grid-cols-3 gap-7 max-w-[1100px] mx-auto items-stretch">
+
+                <!-- CARD 1: National Junior Champion -->
+                <div class="champion-card bg-black-card border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col h-full reveal reveal-d1">
+                    <!-- Student portrait placeholder -->
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=500&h=400&fit=crop&q=80"
+                             alt="National Junior Champion"
+                             class="w-full h-56 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black-card via-transparent to-transparent"></div>
+                        <!-- Medal badge -->
+                        <div class="absolute top-4 right-4 w-12 h-12 bg-gold rounded-full flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="p-7 flex flex-col flex-grow">
+                        <!-- Title -->
+                        <div class="text-[11px] font-bold uppercase tracking-[2px] text-gold mb-3">National Junior Champion</div>
+                        <div class="h-px bg-gradient-to-r from-gold/30 via-orange/20 to-transparent mb-5"></div>
+
+                        <!-- Details -->
+                        <ul class="space-y-3 flex-grow">
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Student</span><div class="text-sm font-semibold text-grey">[Student Name Placeholder]</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-3 h-3 text-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Tournament</span><div class="text-sm font-semibold text-grey">Thailand Junior National Championship (2025)</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                </span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Category</span><div class="text-sm font-semibold text-grey">Girls Class B (13-14 yrs)</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                </span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Score</span><div class="text-sm font-extrabold text-orange">-6 (278)</div></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 2: Singha-KrungThai World Champion -->
+                <div class="champion-card bg-black-card border-2 border-gold/30 rounded-2xl overflow-hidden flex flex-col h-full reveal reveal-d2 relative" style="background: linear-gradient(180deg, rgba(255,215,0,0.04) 0%, #1e1e1e 25%);">
+                    <!-- Featured badge -->
+                    <div class="absolute top-56 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-gold to-orange text-black text-[10px] font-extrabold uppercase tracking-wider px-5 py-1.5 rounded-full z-10 whitespace-nowrap shadow-lg">World Champion</div>
+
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=500&h=400&fit=crop&q=80"
+                             alt="Singha-KrungThai World Champion"
+                             class="w-full h-56 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black-card via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 w-12 h-12 bg-gradient-to-br from-gold to-orange rounded-full flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="p-7 pt-9 flex flex-col flex-grow">
+                        <div class="text-[11px] font-bold uppercase tracking-[2px] text-gold mb-3">Singha-KrungThai World Champion</div>
+                        <div class="h-px bg-gradient-to-r from-gold/30 via-orange/20 to-transparent mb-5"></div>
+
+                        <ul class="space-y-3 flex-grow">
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Student</span><div class="text-sm font-semibold text-grey">[Student Name Placeholder]</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Tournament</span><div class="text-sm font-semibold text-grey">Singha-KrungThai World Golf Championships (2025)</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Category</span><div class="text-sm font-semibold text-grey">Boys Class A (15-18 yrs)</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Score</span><div class="text-sm font-extrabold text-orange">-9 (267)</div></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 3: USWING Junior World Finalist -->
+                <div class="champion-card bg-black-card border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col h-full reveal reveal-d3">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=500&h=400&fit=crop&q=80"
+                             alt="USWING Junior World Finalist"
+                             class="w-full h-56 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black-card via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 w-12 h-12 bg-orange rounded-full flex items-center justify-center shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="p-7 flex flex-col flex-grow">
+                        <div class="text-[11px] font-bold uppercase tracking-[2px] text-gold mb-3">USWING Junior World Finalist</div>
+                        <div class="h-px bg-gradient-to-r from-gold/30 via-orange/20 to-transparent mb-5"></div>
+
+                        <ul class="space-y-3 flex-grow">
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Student</span><div class="text-sm font-semibold text-grey">[Student Name Placeholder]</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Tournament</span><div class="text-sm font-semibold text-grey">USWING Mojing Junior World Golf Championship (San Diego, 2025)</div></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-5 h-5 rounded-full bg-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5"><svg class="w-3 h-3 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+                                <div><span class="text-xs text-grey-dim uppercase tracking-wide">Result</span><div class="text-sm font-extrabold text-orange">Represented Team Thailand, Top 5 Finish</div></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div><!-- /grid -->
+
+            <!-- CTA Button -->
+            <div class="text-center mt-14 reveal">
+                <a href="articles.html" class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-orange to-orange-dark text-white font-bold text-sm uppercase tracking-wider px-10 py-4 rounded-xl hover:shadow-[0_8px_30px_rgba(255,122,0,0.4)] hover:-translate-y-1 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    View All Success Stories
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ╔═══════════════════════════════════════════════════════════╗
+         ║  SECTION 2: BEFORE & AFTER                               ║
+         ╚═══════════════════════════════════════════════════════════╝ -->
+    <section class="py-24 lg:py-32 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Transformations</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Before & After</h2>
+                <p class="text-grey-muted leading-relaxed">Data-driven coaching delivers measurable results. Here's the proof.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-7 max-w-[1000px] mx-auto">
+                <!-- Transformation 1 -->
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-7 card-hover reveal reveal-d1 text-center">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&q=80" alt="Student" class="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-2 border-orange/30">
+                    <h4 class="font-bold text-lg mb-1">James T.</h4>
+                    <p class="text-xs text-orange font-semibold mb-4">Pro Package — 3 Months</p>
+                    <div class="flex items-center justify-center gap-3 mb-3">
+                        <div class="text-center"><div class="text-2xl font-black text-grey-dim">105</div><div class="text-[10px] uppercase text-grey-dim tracking-wide">Before</div></div>
+                        <svg class="w-6 h-6 text-orange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <div class="text-center"><div class="text-2xl font-black text-orange">84</div><div class="text-[10px] uppercase text-orange tracking-wide">After</div></div>
+                    </div>
+                    <p class="text-xs text-grey-dim">-21 strokes in 12 weeks</p>
+                </div>
+                <!-- Transformation 2 -->
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-7 card-hover reveal reveal-d2 text-center">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&q=80" alt="Student" class="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-2 border-orange/30">
+                    <h4 class="font-bold text-lg mb-1">Marcus C.</h4>
+                    <p class="text-xs text-orange font-semibold mb-4">Elite Package — 6 Months</p>
+                    <div class="flex items-center justify-center gap-3 mb-3">
+                        <div class="text-center"><div class="text-2xl font-black text-grey-dim">88</div><div class="text-[10px] uppercase text-grey-dim tracking-wide">Before</div></div>
+                        <svg class="w-6 h-6 text-orange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <div class="text-center"><div class="text-2xl font-black text-orange">74</div><div class="text-[10px] uppercase text-orange tracking-wide">After</div></div>
+                    </div>
+                    <p class="text-xs text-grey-dim">-14 strokes, single-digit handicap</p>
+                </div>
+                <!-- Transformation 3 -->
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-7 card-hover reveal reveal-d3 text-center">
+                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&q=80" alt="Student" class="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-2 border-orange/30">
+                    <h4 class="font-bold text-lg mb-1">Sarah W.</h4>
+                    <p class="text-xs text-orange font-semibold mb-4">Pro Package — 4 Months</p>
+                    <div class="flex items-center justify-center gap-3 mb-3">
+                        <div class="text-center"><div class="text-2xl font-black text-grey-dim">96</div><div class="text-[10px] uppercase text-grey-dim tracking-wide">Before</div></div>
+                        <svg class="w-6 h-6 text-orange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        <div class="text-center"><div class="text-2xl font-black text-orange">81</div><div class="text-[10px] uppercase text-orange tracking-wide">After</div></div>
+                    </div>
+                    <p class="text-xs text-grey-dim">-15 strokes, first tournament entry</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ╔═══════════════════════════════════════════════════════════╗
+         ║  SECTION 3: TESTIMONIALS                                 ║
+         ╚═══════════════════════════════════════════════════════════╝ -->
+    <section class="py-24 lg:py-32 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Testimonials</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">What Our Students Say</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-7 max-w-[900px] mx-auto">
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-8 card-hover reveal reveal-d1 relative">
+                    <span class="absolute top-4 left-6 text-[60px] font-black leading-none text-orange/10">"</span>
+                    <blockquote class="text-grey leading-relaxed mb-5 relative z-10 mt-6">
+                        "The TrackMan data opened my eyes. I had no idea my club path was so far off. After 8 sessions, my slice is gone and I'm hitting draws consistently."
+                    </blockquote>
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&q=80" alt="James T." class="w-10 h-10 rounded-full object-cover border border-orange/30">
+                        <div><div class="text-sm font-bold">James T.</div><div class="text-xs text-grey-dim">Pro Package Member</div></div>
+                    </div>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-8 card-hover reveal reveal-d2 relative">
+                    <span class="absolute top-4 left-6 text-[60px] font-black leading-none text-orange/10">"</span>
+                    <blockquote class="text-grey leading-relaxed mb-5 relative z-10 mt-6">
+                        "My daughter went from struggling at local events to winning the Junior National Championship. The coaches here truly care and the technology is unmatched."
+                    </blockquote>
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=80&h=80&fit=crop&q=80" alt="Parent" class="w-10 h-10 rounded-full object-cover border border-orange/30">
+                        <div><div class="text-sm font-bold">Proud Parent</div><div class="text-xs text-grey-dim">Junior Program</div></div>
+                    </div>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-8 card-hover reveal reveal-d1 relative">
+                    <span class="absolute top-4 left-6 text-[60px] font-black leading-none text-orange/10">"</span>
+                    <blockquote class="text-grey leading-relaxed mb-5 relative z-10 mt-6">
+                        "I play 3 rounds a week at Blue Canyon but never improved. Two months of simulator work here and I broke 80 for the first time ever."
+                    </blockquote>
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80" alt="Marcus C." class="w-10 h-10 rounded-full object-cover border border-orange/30">
+                        <div><div class="text-sm font-bold">Marcus C.</div><div class="text-xs text-grey-dim">Elite Package Member</div></div>
+                    </div>
+                </div>
+                <div class="bg-black-card border border-white/[0.06] rounded-2xl p-8 card-hover reveal reveal-d2 relative">
+                    <span class="absolute top-4 left-6 text-[60px] font-black leading-none text-orange/10">"</span>
+                    <blockquote class="text-grey leading-relaxed mb-5 relative z-10 mt-6">
+                        "Best indoor golf facility in Thailand. Period. The bays are immaculate, the coaches are world-class, and the experience feels truly premium."
+                    </blockquote>
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1600012043427-e8f4dc5f3848?w=80&h=80&fit=crop&q=80" alt="Studio review" class="w-10 h-10 rounded-full object-cover border border-orange/30">
+                        <div><div class="text-sm font-bold">Google Reviewer</div><div class="text-xs text-grey-dim">5-Star Review</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         CTA
+         ═══════════════════════════════════════════ -->
+    <section class="py-24 lg:py-32 border-t border-white/5 relative overflow-hidden">
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none" style="background: radial-gradient(circle, rgba(255,122,0,0.08) 0%, transparent 70%);"></div>
+        <div class="relative z-10 text-center max-w-2xl mx-auto px-5 reveal">
+            <p class="text-xs font-bold uppercase tracking-[3px] text-orange mb-3">Join Them</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Your Success Story Starts Here</h2>
+            <p class="text-grey-muted leading-relaxed mb-10">Every champion started with a first lesson. Book yours today.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="openModal()" class="inline-flex items-center justify-center gap-2 bg-orange text-black font-bold text-base px-8 py-4 rounded-xl hover:bg-orange-dark hover:text-white hover:shadow-[0_8px_30px_rgba(255,122,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Contact Us
+                </button>
+                <a href="lessons.html" class="inline-flex items-center justify-center gap-2 border border-white/10 text-white font-bold text-base px-8 py-4 rounded-xl hover:border-orange hover:text-orange transition-all duration-300 hover:-translate-y-0.5">
+                    View Packages
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════ -->
+    <footer class="border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="grid md:grid-cols-3 gap-10 mb-10">
+                <div><div class="text-lg font-extrabold mb-3">LIMITLESS <span class="text-orange">GOLF</span></div><p class="text-sm text-grey-dim leading-relaxed">Phuket's premier indoor golf studio. World-class simulators, expert coaching, and a luxury experience.</p></div>
+                <div><h4 class="font-bold text-sm uppercase tracking-wider mb-4">Quick Links</h4><ul class="space-y-2"><li><a href="index.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Home</a></li><li><a href="about.html" class="text-sm text-grey-dim hover:text-orange transition-colors">About Us</a></li><li><a href="lessons.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Lesson Packages</a></li><li><a href="bays.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Book a Bay</a></li><li><a href="articles.html" class="text-sm text-grey-dim hover:text-orange transition-colors">Articles</a></li></ul></div>
+                <div><h4 class="font-bold text-sm uppercase tracking-wider mb-4">Contact</h4><ul class="space-y-2 text-sm text-grey-dim"><li>123/45 Laguna, Cherngtalay</li><li>Phuket 83110, Thailand</li><li class="pt-1"><a href="tel:+66123456789" class="hover:text-orange transition-colors">+66 12 345 6789</a></li><li><a href="mailto:info@limitlessgolfphuket.com" class="hover:text-orange transition-colors">info@limitlessgolfphuket.com</a></li></ul></div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-grey-dim">&copy; 2026 Limitless Golf Studio Phuket. All rights reserved.</p>
+                <ul class="flex items-center gap-5"><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Privacy Policy</a></li><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Terms</a></li><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Instagram</a></li><li><a href="#" class="text-xs text-grey-dim hover:text-orange transition-colors">Facebook</a></li></ul>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ═══════════════════════════════════════════
+         JAVASCRIPT
+         ═══════════════════════════════════════════ -->
+    <script>
+        const navToggle=document.getElementById('navToggle'),mobileMenu=document.getElementById('mobileMenu'),b1=document.getElementById('b1'),b2=document.getElementById('b2'),b3=document.getElementById('b3');let menuOpen=false;navToggle.addEventListener('click',()=>{menuOpen=!menuOpen;mobileMenu.classList.toggle('hidden',!menuOpen);mobileMenu.classList.toggle('flex',menuOpen);b1.style.transform=menuOpen?'rotate(45deg) translate(5px,5px)':'';b2.style.opacity=menuOpen?'0':'1';b3.style.transform=menuOpen?'rotate(-45deg) translate(5px,-5px)':'';});mobileMenu.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>{menuOpen=false;mobileMenu.classList.add('hidden');mobileMenu.classList.remove('flex');b1.style.transform='';b2.style.opacity='1';b3.style.transform='';}));
+        const modal=document.getElementById('contactModal');function openModal(){modal.classList.add('active');document.body.style.overflow='hidden';}function closeModal(){modal.classList.remove('active');document.body.style.overflow='';}modal.addEventListener('click',(e)=>{if(e.target===modal)closeModal();});document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal();});
+        const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}});},{threshold:0.12,rootMargin:'0px 0px -50px 0px'});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+    </script>
+</body>
+</html>
